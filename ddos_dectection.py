@@ -9,13 +9,13 @@ from sklearn.metrics import accuracy_score
 import pandas as pd
 
 def capture_packets():
-    # Define a filter to capture only TCP packets
+    # defining a filter to capture only TCP packets
     filter_str = "tcp"
-    packets = sniff(filter=filter_str, count=100)  # Capture 100 packets, adjust count as needed
+    packets = sniff(filter=filter_str, count=100)  # capturing 100 packets
     return packets
 
 def extract_features(packet):
-    # Extract relevant features from the packet
+    # extracting relevant features from the packet
     features = {}
     if IP in packet:
         features['src_ip'] = packet[IP].src
@@ -24,29 +24,25 @@ def extract_features(packet):
     return features
 
 def preprocess_data(packets):
-    # Preprocess the data by extracting features from each packet
+    # preprocessing the data by extracting features from each packet
     data = [extract_features(packet) for packet in packets]
     return pd.DataFrame(data)
 
 def train_model(X_train, y_train):
-    # Train a simple Random Forest classifier
+    # training a simple Random Forest classifier
     model = RandomForestClassifier()
     model.fit(X_train, y_train)
     return model
 
 def main():
-    threshold = 0.5  # Adjust threshold as needed
+    threshold = 0.5  
     while True:
-        # Capture packets
+       
         packets = capture_packets()
-
-        # Preprocess the data
         df = preprocess_data(packets)
-
-        # Dummy labels for demonstration purposes; you'd need labeled data for training
         labels = [0] * len(df)
 
-        # Convert IP addresses to numerical features using one-hot encoding
+        # converting IP addresses to numerical features using one-hot encoding
         column_transformer = ColumnTransformer(
             [("ip_encoder", OneHotEncoder(), ['src_ip', 'dst_ip'])],
             remainder='passthrough'
@@ -57,20 +53,15 @@ def main():
 
         X = pipeline.fit_transform(df)
 
-        # Split the data for training (80%) and testing (20%)
+        # splitting the data for training (80%) and testing (20%)
         X_train, X_test, y_train, y_test = train_test_split(X, labels, test_size=0.2, random_state=42)
 
-        # Train the model
+        # training the model
         model = train_model(X_train, y_train)
-
-        # Make predictions on the test set
         predictions = model.predict(X_test)
-
-        # Evaluate the model
         accuracy = accuracy_score(y_test, predictions)
         print(f"Model Accuracy: {accuracy}")
 
-        # Check for potential DDoS attacks based on the model predictions
         potential_attacks = [df.iloc[i] for i in range(len(predictions)) if predictions[i] > threshold]
 
         if potential_attacks:
