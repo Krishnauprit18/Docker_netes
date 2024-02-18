@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" ng="a">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <title>Breach and Attack Simulator</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Breach and Attack Simulator</h1>
+        </div>
+        
+        <div class="section">
+            <h2>Select Simulation Type</h2>
+            <form id="simulationTypeForm">
+                <label><input type="checkbox" name="simulation_type" value="credential_theft"> Credential Theft</label>
+                <label><input type="checkbox" name="simulation_type" value="malware_injection"> Malware Injection</label>
+                <label><input type="checkbox" name="simulation_type" value="ddos_attack"> DDoS Attack</label>
+                <label><input type="checkbox" name="simulation_type" value="data_exfiltration"> Data Exfiltration</label>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Choose Target System</h2>
+            <form id="targetSystemForm">
+                <label for="target_ip">Target IP:</label>
+                <input type="text" id="target_ip" name="target_ip" required>
+                <label for="target_port">Port:</label>
+                <input type="text" id="target_port" name="target_port" required>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Advanced Settings</h2>
+            <form id="advancedSettingsForm">
+                <label><input type="checkbox" name="ai_simulation" required> AI-driven Simulation</label>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Run Simulation</h2>
+            <form id="simulationForm">
+                <button type="button" id="startSimulation">Start Simulation</button>
+                <div id="loading" class="hidden">
+                    <img src="/loading.gif" alt="Loading...">
+                </div>
+            </form>
+        </div>
+
+        <div class="section hidden" id="simulationResults">
+            <h2>Simulation Results</h2>
+            <p>Attack Successful!</p>
+            <p>Details:</p>
+            <ul>
+                <li>Credentials Stolen</li>
+                <li>Malware Deployed</li>
+                <li>No. of Requests: 10,000</li>
+            </ul>
+        </div>
+    </div>
+    <script src="/script.js"></script>
+</body>
+</html>
