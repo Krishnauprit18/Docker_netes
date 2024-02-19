@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/styles.css">
     <title>Breach and Attack Simulator</title>
 </head>
 <body>
+    
     <div class="container">
         <div class="header">
             <h1>Breach and Attack Simulator</h1>
@@ -27,31 +28,34 @@
             <form id="targetSystemForm">
                 <label for="target_ip">Target IP:</label>
                 <input type="text" id="target_ip" name="target_ip" required>
-                <label for="target_port">Port:</label>
-                <input type="text" id="target_port" name="target_port" required>
+                <label for="target_port">No. of Attacks:</label>
+                <input type="number" id="target_port" name="target_port" required>
             </form>
         </div>
 
         <div class="section">
             <h2>Advanced Settings</h2>
             <form id="advancedSettingsForm">
-                <label><input type="checkbox" name="ai_simulation" required> AI-driven Simulation</label>
+                <label><input type="checkbox" name="ai_simulation"> AI-driven Breach Attack Simulator</label>
             </form>
         </div>
 
         <div class="section">
             <h2>Run Simulation</h2>
             <form id="simulationForm">
-                <button type="button" id="startSimulation">Start Simulation</button>
+                <button type="submit" id="startSimulation">Start Simulation</button>
                 <div id="loading" class="hidden">
                     <img src="/loading.gif" alt="Loading...">
                 </div>
             </form>
         </div>
+
         <div class="section hidden" id="simulationResults">
-        <h2>Simulation Results</h2>
-        <div id="resultsContent"></div>
-    </div>
+            <h2>Simulation Results</h2>
+            <p id="credentialsStolen"></p>
+            <p id="selectedSimulationTypes"></p>
+            <p id="numberOfRequests"></p>
+        </div>
     </div>
     <script src="/script.js"></script>
 </body>
