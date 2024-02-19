@@ -7,15 +7,13 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score
 import pandas as pd
-
+import random as rd
 def capture_packets():
-    # defining a filter to capture only TCP packets
     filter_str = "tcp"
-    packets = sniff(filter=filter_str, count=100)  # capturing 100 packets
+    packets = sniff(filter=filter_str, count=100)  
     return packets
 
 def extract_features(packet):
-    # extracting relevant features from the packet
     features = {}
     if IP in packet:
         features['src_ip'] = packet[IP].src
@@ -24,12 +22,10 @@ def extract_features(packet):
     return features
 
 def preprocess_data(packets):
-    # preprocessing the data by extracting features from each packet
     data = [extract_features(packet) for packet in packets]
     return pd.DataFrame(data)
 
 def train_model(X_train, y_train):
-    # training a simple Random Forest classifier
     model = RandomForestClassifier()
     model.fit(X_train, y_train)
     return model
@@ -37,12 +33,10 @@ def train_model(X_train, y_train):
 def main():
     threshold = 0.5  
     while True:
-       
         packets = capture_packets()
         df = preprocess_data(packets)
-        labels = [0] * len(df)
+        labels = [1 if rd.random() < 0.1 else 0 for _ in range(len(df))]  # Assign 10% positive labels
 
-        # converting IP addresses to numerical features using one-hot encoding
         column_transformer = ColumnTransformer(
             [("ip_encoder", OneHotEncoder(), ['src_ip', 'dst_ip'])],
             remainder='passthrough'
@@ -53,14 +47,13 @@ def main():
 
         X = pipeline.fit_transform(df)
 
-        # splitting the data for training (80%) and testing (20%)
         X_train, X_test, y_train, y_test = train_test_split(X, labels, test_size=0.2, random_state=42)
 
-        # training the model
         model = train_model(X_train, y_train)
         predictions = model.predict(X_test)
         accuracy = accuracy_score(y_test, predictions)
         print(f"Model Accuracy: {accuracy}")
+        threshold = 0.5  # Adjust threshold as needed
 
         potential_attacks = [df.iloc[i] for i in range(len(predictions)) if predictions[i] > threshold]
 
