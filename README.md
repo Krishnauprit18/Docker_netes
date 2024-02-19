@@ -25,7 +25,6 @@ git clone <https://github.com/Krishnauprit18/Docker_netes>
 
 **Install requirements:**
 pip install scikitlearn
-pip install Flask
 pip install scapy
 
 **Features:**
@@ -47,7 +46,6 @@ Javascript
 
 **Backend:**
 Python
-Flask
 Ajax
 
 **AI Algorithms and Libraries:**
