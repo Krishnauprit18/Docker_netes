@@ -53,7 +53,7 @@ def main():
         predictions = model.predict(X_test)
         accuracy = accuracy_score(y_test, predictions)
         print(f"Model Accuracy: {accuracy}")
-        threshold = 0.5  # Adjust threshold as needed
+        threshold = 0.5  
 
         potential_attacks = [df.iloc[i] for i in range(len(predictions)) if predictions[i] > threshold]
 
