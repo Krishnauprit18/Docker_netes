@@ -1,67 +1,55 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const startSimulationButton = document.getElementById('startSimulation');
-    const simulationTypeForm = document.getElementById('simulationTypeForm');
-    const targetIpInput = document.getElementById('target_ip');
-    const targetPortInput = document.getElementById('target_port');
-    const advancedSettingsForm = document.getElementById('advancedSettingsForm');
-    const simulationResults = document.getElementById('simulationResults');
-    const resultsContent = document.getElementById('resultsContent');
+document.addEventListener("DOMContentLoaded", function() {
+    const simulationForm = document.getElementById("simulationForm");
+    const simulationResults = document.getElementById("simulationResults");
 
-    startSimulationButton.addEventListener('click', function () {
-        const selectedSimulationTypes = simulationTypeForm.querySelectorAll('input[name="simulation_type"]:checked');
-        if (selectedSimulationTypes.length === 0) {
-            alert('Please select at least one simulation type.');
+    simulationForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        const targetIp = document.getElementById("target_ip").value.trim();
+        const numberOfAttacks = parseInt(document.getElementById("target_port").value.trim());
+        const simulationTypes = document.querySelectorAll('input[name="simulation_type"]:checked');
+        const aiSimulation = document.querySelector('input[name="ai_simulation"]:checked');
+
+        // Check if target IP or number of attacks is empty
+        if (targetIp === '' || isNaN(numberOfAttacks)) {
+            alert("Please provide both target IP and number of attacks.");
             return;
         }
 
-        const targetIp = targetIpInput.value.trim();
-        const targetPort = targetPortInput.value.trim();
-
-        if (!isValidIpAddress(targetIp) || !isValidPort(targetPort)) {
-            alert('Please enter a valid IP address and port.');
+        // Check if the target IP is a valid IP address format
+        if (!isValidIpAddress(targetIp)) {
+            alert("Please provide a valid IP address for the target.");
             return;
         }
 
-        if (!advancedSettingsForm.querySelector('input[name="ai_simulation"]:checked')) {
-            alert('Please select AI-driven Simulation.');
+        // Check if no simulation type is selected
+        if (simulationTypes.length === 0) {
+            alert("Please select at least one simulation type.");
             return;
         }
 
-        // Function to validate IP address format
-        function isValidIpAddress(ip) {
-            const ipRegex = /^(\d{1,3}\.){3}\d{1,3}$/;
-            return ipRegex.test(ip);
+        const credentialsStolen = document.getElementById("credentialsStolen");
+        const selectedSimulationTypes = document.getElementById("selectedSimulationTypes");
+        const numberOfRequests = document.getElementById("numberOfRequests");
+
+        selectedSimulationTypes.textContent = "Selected Simulation Types: " + Array.from(simulationTypes).map(type => type.value.charAt(0).toUpperCase() + type.value.slice(1).replace('_', ' ')).join(", ");
+        if (aiSimulation) {
+            selectedSimulationTypes.textContent += ", AI-driven Breach Attack Simulator";
         }
 
-        // Function to validate port format
-        function isValidPort(port) {
-            const portRegex = /^(?!0)([0-9]{1,5})$/;
-            return portRegex.test(port);
+        // Determine if credentials are stolen based on the number of attacks
+        if (numberOfAttacks < 100) {
+            credentialsStolen.textContent = "Credentials Not Stolen";
+        } else {
+            credentialsStolen.textContent = "Credentials Stolen";
         }
 
-        resultsContent.innerHTML = `<p>Selected Simulation Type: ${getSelectedSimulationTypes()}</p>`;
+        numberOfRequests.textContent = "No. of Attacks: " + numberOfAttacks;
 
-        simulateServerResponse();
+        simulationResults.classList.remove("hidden");
     });
-
-    function getSelectedSimulationTypes() {
-        const selectedTypes = Array.from(simulationTypeForm.querySelectorAll('input[name="simulation_type"]:checked'))
-            .map(checkbox => checkbox.value);
-        return selectedTypes.join(', ');
-    }
-
-    function simulateServerResponse() {
-        setTimeout(() => {
-            resultsContent.innerHTML += `
-                <p>Attack Successful!</p>
-                <p>Details:</p>
-                <ul>
-                    <li>Credentials Stolen</li>
-                    <li>Malware Deployed</li>
-                    <li>No. of Requests: 10,000</li>
-                </ul>
-            `;
-            simulationResults.classList.remove('hidden');
-        }, 2000); 
-    }
 });
+
+function isValidIpAddress(ipAddress) {
+    const ipPattern = /^([0-9]{1,3}\.){3}[0-9]{1,3}$/;
+    return ipPattern.test(ipAddress);
+}
