@@ -9,13 +9,13 @@ document.addEventListener("DOMContentLoaded", function() {
         const simulationTypes = document.querySelectorAll('input[name="simulation_type"]:checked');
         const aiSimulation = document.querySelector('input[name="ai_simulation"]:checked');
 
-        // Check if target IP or number of attacks is empty
+        // checking if target IP or number of attacks is empty
         if (targetIp === '' || isNaN(numberOfAttacks)) {
             alert("Please provide both target IP and number of attacks.");
             return;
         }
 
-        // Check if the target IP is a valid IP address format
+        // checking if the target IP is a valid IP address format
         if (!isValidIpAddress(targetIp)) {
             alert("Please provide a valid IP address for the target.");
             return;
