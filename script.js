@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         // Determine if credentials are stolen based on the number of attacks
-        if (numberOfAttacks < 100) {
+        if (numberOfAttacks < 150) {
             credentialsStolen.textContent = "Credentials Not Stolen";
         } else {
             credentialsStolen.textContent = "Credentials Stolen";
